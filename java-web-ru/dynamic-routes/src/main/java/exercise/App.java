@@ -25,12 +25,14 @@ public final class App {
 
         app.get("/companies/{id}", ctx -> {
 
-            if (App.getResult(ctx.pathParam("id")).isEmpty()) {
+            var id = ctx.pathParam("id");
+            Map<String, String> company = App.getResult(id);
+
+            if (company.isEmpty()) {
                 throw new NotFoundResponse("Company not found");
-            } else {
-                ctx.json(App.getResult(ctx.pathParam("id")));
             }
 
+            ctx.json(App.getResult(ctx.pathParam("id")));
         });
 
         return app;
@@ -42,7 +44,6 @@ public final class App {
         Map<String, String> res = new HashMap<>();
 
         for (Map<String, String> company : COMPANIES) {
-
             if (company.get("id").equals(id)) {
                 res.putAll(company);
             }
